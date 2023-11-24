@@ -1,0 +1,42 @@
+from CreateSession import CreateButton
+
+menu_group = CreateButton()
+
+menu_group.add_button('1 Курс', "1_course")
+menu_group.add_button('2 Курс', "2_course")
+menu_group.add_button('3 Курс', "3_course")
+menu_group.add_button('4 Курс', "4_course")
+menu_group = menu_group.return_buttons()
+
+menu_1_course = CreateButton()
+menu_1_course.add_two_button_in_line('1-1 А9', "1-1 Б9", "11A9", "11B9")
+menu_1_course.add_two_button_in_line('1-1 Г9', "1-1 П9", "11G9", "11P9")
+menu_1_course.add_two_button_in_line('1-2 П9', "1-1 С9", "12P9", "11S9")
+menu_1_course.add_two_button_in_line('1-1 Р9', "1-2 Р9", "11R9", "12R9")
+menu_1_course.add_two_button_in_line("1-1 С11", "1-1 П11", "11S11", "11P11")
+menu_1_course.add_button("Назад", "back")
+menu_1_course = menu_1_course.return_buttons()
+
+menu_2_course = CreateButton()
+menu_2_course.add_two_button_in_line('2-1 А9', "2-1 Г9", "11A9", "11B9")
+menu_2_course.add_two_button_in_line('2-1 Т9', "2-1 С9", "11G9", "11P9")
+menu_2_course.add_two_button_in_line('2-1 П9', "2-2 П9", "12P9", "11S9")
+menu_2_course.add_two_button_in_line('2-1С11', "2-1 П11", "11R9", "12R9")
+menu_2_course.add_button("2-1Б9", "21B9")
+menu_2_course.add_button("Назад", "back")
+menu_2_course = menu_2_course.return_buttons()
+
+menu_3_course = CreateButton()
+menu_3_course.add_two_button_in_line('3-1 А9', "3-1 Г9", "31A9", "31G9")
+menu_3_course.add_two_button_in_line('3-1 Т9', "3-1 С9", "31T9", "31S9")
+menu_3_course.add_two_button_in_line('3-1 С11', "3-1Б9", "31S11", "31B9")
+menu_3_course.add_two_button_in_line('3-1 П9', "3-2 П9", "31P9", "32P9")
+menu_3_course.add_button("Назад", "back")
+menu_3_course = menu_3_course.return_buttons()
+
+menu_4_course = CreateButton()
+menu_4_course.add_two_button_in_line('4-1 А9', "4-1 Г9", "41A9", "41G9")
+menu_4_course.add_two_button_in_line('4-1 Э9', "4-1С9", "41E9", "41S9")
+menu_4_course.add_two_button_in_line('4-1 П9', "4-2 П9", "41P9", "42P9")
+menu_4_course.add_button("Назад", "back")
+menu_4_course = menu_4_course.return_buttons()

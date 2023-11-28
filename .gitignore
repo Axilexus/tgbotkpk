@@ -3,3 +3,6 @@ venv/
 __pycache__/
 KPKBOT.session
 KPKBOT/
+chats.db
+groups.db
+make_dict.py

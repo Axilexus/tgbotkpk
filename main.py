@@ -5,6 +5,7 @@ import texts
 import asyncio
 from buttons import *
 Bot = CreateSession("KPKBOT")
+letter = {b'11A9': '1-1 А9', b'11B9': '1-1 Б9', b'11G9': '1-1 Г9', b'11P9': '1-1 П9', b'12P9': '1-2 П9', b'11S9': '1-1 С9', b'11R9': '1-1 Р9', b'12R9': '1-2 Р9', b'11S11': '1-1 С11', b'11P11': '1-1 П11', b'21A9': '2-1 А9', b'21B9': '2-1Б9', b'21T9': '2-1 Т9', b'21S9': '2-1С11', b'21P9': '2-1 П9', b'22P9': '2-2 П9', b'21P11': '2-1 П11', b'31A9': '3-1 А9', b'31G9': '3-1 Г9', b'31T9': '3-1 Т9', b'31S9': '3-1 С9', b'31S11': '3-1 С11', b'31B9': '3-1Б9', b'31P9': '3-1 П9', b'32P9': '3-2 П9', b'41A9': '4-1 А9', b'41G9': '4-1 Г9', b'41E9': '4-1 Э9', b'41S9': '4-1С9', b'41P9': '4-1 П9', b'42P9': '4-2 П9'}
 
 
 
@@ -37,11 +38,15 @@ async def chats_msg(event):
         await event.respond(texts.DENAY)
 
 @Bot.client.on(events.NewMessage(pattern='/group'))
-async def test_msg(event):
+async def select_group_msg(event):
     await event.respond('Пожалуйста, выберите свой курс:', buttons=menu_group)
-
+@Bot.client.on(events.NewMessage(pattern="/calls"))
+async def calls_msg(event):
+    await Bot.client.send_file(event.message.chat.id, file='images/calls.jpg', caption="Расписание звонков:")
 @Bot.client.on(events.CallbackQuery())
 async def callback_handler(event):
+
+
     match event.data:
         case b'1_course':
             await event.edit("Выберите группу первого курса:", buttons=menu_1_course)
@@ -54,7 +59,22 @@ async def callback_handler(event):
         case b'back':
             await event.edit('Пожалуйста, выберите свой курс:', buttons=menu_group)
         case _:
-            await event.edit("Еще не готово :(")
+            groups = DataBase('groups.db')
+            groups.cur.execute("CREATE TABLE IF NOT EXISTS groups (chat_id INTEGER PRIMARY KEY, group_name TEXT)")
+            chat_id = event.chat.id
+            group_name = letter[event.data]
+            groups.cur.execute("SELECT * FROM groups WHERE chat_id=?", (chat_id,))
+            existing_group = groups.cur.fetchone()
+            if existing_group:
+                # Если запись уже есть, обновляем название группы
+                groups.cur.execute("UPDATE groups SET group_name=? WHERE chat_id=?", (group_name, chat_id))
+                groups.conn.commit()
+                await event.edit( f"Группа обновлена: {group_name}")
+            else:
+                # Если записи нет, добавляем новую запись
+                groups.cur.execute("INSERT INTO groups VALUES (?, ?)", (chat_id, group_name))
+                groups.conn.commit()
+                await event.edit(chat_id, f"Группа добавлена: {group_name}")
 
 
 

@@ -48,8 +48,27 @@ async def deldocs(event):
 async def schelude_msg(event):
     sender = Schedule()
     text = sender.send_schelude(event.message.chat.id)
-    await event.respond(text)
+    try:
+        await event.respond(text)
+    except:
+        await event.respond("Похоже что то пошло не так... попробуйте ввести команду /groups и выбрать группу. Если не поможет, напишите создателю @axilexus")
+@Bot.client.on(events.NewMessage(pattern='/sendall'))
+async def sendall_msg(event):
+    if event.message.chat.id == 1051119325:
+        msg = event.message.text.split(" ", maxsplit=1)[1]
+        chat_id = event.message.chat.id
+        chats = DataBase('chats.db')
+        chats_id = chats.select_data_all("chats")
+        for chat in chats_id:
+            print(chat[0], msg)
+            await Bot.client.send_message(int(chat[0]), msg)
+    else:
+        await event.respond(texts.DENAY)
 
+
+@Bot.client.on(events.NewMessage(pattern='/addh'))
+async def add_homework_msg(event):
+    await event.respond(texts.DENAY)
 @Bot.client.on(events.NewMessage(pattern='/chats'))
 async def chats_msg(event):
     if event.message.chat.id == 1051119325:
@@ -59,7 +78,6 @@ async def chats_msg(event):
         text = texts.CHATS_TEXT
         for chat in chats_id:
             text += f"```{chat[0]}```\n"
-
         await event.respond(text)
     else:
         await event.respond(texts.DENAY)

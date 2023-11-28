@@ -1,4 +1,5 @@
 import texts
+from apply_schedule import *
 from CreateSession import CreateSession, events
 from DataBase import DataBase
 import texts
@@ -21,7 +22,33 @@ async def start_msg(event):
 @Bot.client.on(events.NewMessage(pattern='/help'))
 async def help_msg(event):
     await event.respond(texts.HELP)
-
+@Bot.client.on(events.NewMessage(pattern='/h'))
+async def homework_msg(event):
+    await event.respond(texts.DENAY)
+@Bot.client.on(events.NewMessage(pattern='/dwnld'))
+async def download_schelude(event):
+    if event.message.chat.id == 1051119325:
+        url = event.message.text.split(' ', maxsplit=1)[1]
+        down = Schedule()
+        down.download(url)
+        await event.respond("Успешно!")
+    else:
+        await event.respond(texts.DENAY)
+@Bot.client.on(events.NewMessage(pattern='/deldoc'))
+async def deldocs(event):
+    if event.message.chat.id == 1051119325:
+        docs = os.listdir()
+        for doc in docs:
+            if ".docx" in doc:
+                os.remove(doc)
+                await event.respond(f"Расписание {doc} было удалено")
+    else:
+        await event.respond(texts.DENAY)
+@Bot.client.on(events.NewMessage(pattern='/r'))
+async def schelude_msg(event):
+    sender = Schedule()
+    text = sender.send_schelude(event.message.chat.id)
+    await event.respond(text)
 
 @Bot.client.on(events.NewMessage(pattern='/chats'))
 async def chats_msg(event):
@@ -45,8 +72,6 @@ async def calls_msg(event):
     await Bot.client.send_file(event.message.chat.id, file='images/calls.jpg', caption="Расписание звонков:")
 @Bot.client.on(events.CallbackQuery())
 async def callback_handler(event):
-
-
     match event.data:
         case b'1_course':
             await event.edit("Выберите группу первого курса:", buttons=menu_1_course)

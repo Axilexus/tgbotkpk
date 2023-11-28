@@ -3,6 +3,8 @@ import os
 from DataBase import DataBase
 import gdown
 class Schedule:
+    def __init__(self):
+        pass
     def download(self, url):
         url = url.split("/")
 
@@ -30,6 +32,7 @@ class Schedule:
                                 return text
 
     def send_schelude(self, chat_id):
+        Schedule = self
         groups = DataBase('groups.db')
         # Создаем таблицу для хранения данных о чатах
         groups.cur.execute('''CREATE TABLE IF NOT EXISTS groups (chat_id INTEGER PRIMARY KEY, group_name TEXT)''')
@@ -57,5 +60,4 @@ class Schedule:
             if "СУББОТА" in file:
                 text += Schedule.search(group[1], file)
             text += '```\n'
-            print(text)
         return text

@@ -46,12 +46,17 @@ async def deldocs(event):
         await event.respond(texts.DENAY)
 @Bot.client.on(events.NewMessage(pattern='/r'))
 async def schelude_msg(event):
+    chat_id = event.message.chat.id
+    chats = DataBase('chats.db')
+    chats.insert_data("chats", chat_id)
     sender = Schedule()
-    text = sender.send_schelude(event.message.chat.id)
+
     try:
+        text = sender.send_schelude(event.message.chat.id)
         await event.respond(text)
-    except:
-        await event.respond("Похоже что то пошло не так... попробуйте ввести команду /groups и выбрать группу. Если не поможет, напишите создателю @axilexus")
+    except TypeError as e:
+       await event.respond("Похоже что то пошло не так... попробуйте ввести команду /group и выбрать группу. Если не поможет, напишите создателю @axilexus")
+
 @Bot.client.on(events.NewMessage(pattern='/sendall'))
 async def sendall_msg(event):
     if event.message.chat.id == 1051119325:

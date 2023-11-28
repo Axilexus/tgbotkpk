@@ -16,7 +16,7 @@ class DataBase:
         print("Created")
 
     def insert_data(self, table, data):
-        self.cur.execute(f"INSERT INTO {table} VALUES (?)", (data,))
+        self.cur.execute(f"INSERT OR REPLACE INTO {table} VALUES (?)", (data,))
         self.conn.commit()
         print("Inserted")
 
